@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ol id="list">
+    </ol>
+    <script>
+        const evtSource = new EventSource("http://localhost:8080/?subscription={interval}");
+
+        evtSource.onmessage = function (event) {
+            const newElement = document.createElement("li");
+            const eventList = document.getElementById("list");
+
+            newElement.textContent = event.data;
+            eventList.appendChild(newElement);
+        }
+
+    </script>
+</body>
+
+</html>

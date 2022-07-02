@@ -30,7 +30,7 @@ impl SubscriptionRoot {
             loop {
                 tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                 value += n;
-                tracing::info!("send value");
+                tracing::debug!("send value");
                 yield value
             }
         }

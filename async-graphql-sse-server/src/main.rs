@@ -15,12 +15,16 @@ use async_graphql::{
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse, GraphQLSubscription};
 use axum::{
     extract::Query,
+    http::Method,
     response::{self, sse::Event, IntoResponse, Sse},
     routing::get,
     Extension, Router, Server,
 };
 use shutdown::Shutdown;
-use tower_http::trace::TraceLayer;
+use tower_http::{
+    cors::{Any, CorsLayer},
+    trace::TraceLayer,
+};
 use tracing_subscriber::{prelude::*, EnvFilter};
 
 async fn graphql_handler(
@@ -49,7 +53,6 @@ async fn graphql_handler_query(
 
     let stream: async_graphql::async_stream::AsyncStream<Result<Event, serde_json::Error>, _> = try_stream! {
         while let Some(response) = subscription.next().await {
-            println!("{:?}", response);
             yield Event::default().json_data(response)?;
         }
         handle.abort()
@@ -89,10 +92,17 @@ async fn main() -> Result<(), Error> {
 
     let (shutdown, fut) = shutdown::new();
 
+    let cors = CorsLayer::new()
+        // allow `GET` and `POST` when accessing the resource
+        .allow_methods([Method::GET, Method::POST])
+        // allow requests from any origin
+        .allow_origin(Any);
+
     let app = Router::new()
         .route("/", get(graphql_handler_query).post(graphql_handler))
         .route("/playground", get(graphql_playground))
         .route("/ws", GraphQLSubscription::new(schema.clone()))
+        .layer(cors)
         .layer(TraceLayer::new_for_http())
         .layer(Extension(schema))
         .layer(Extension(shutdown));

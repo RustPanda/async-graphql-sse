@@ -15,7 +15,7 @@ async-graphql-axum = "4.0.4"
 tokio = {version = "1.19.2", features = ["rt-multi-thread", "macros", "time", "signal"]}
 
 tracing-subscriber = {version = "0.3.14", features = ["env-filter"]}
-tower-http = {version = "*", features = ["trace"]}
+tower-http = {version = "*", features = ["trace", "cors"]}
 tracing = "0.1.35"
 anyhow = "1.0.58"
 
