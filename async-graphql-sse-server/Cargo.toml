@@ -1,0 +1,23 @@
+[package]
+name = "async-graphql-sse-server"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-graphql = {version = "4.0.4", features = ["tracing"]}
+axum = "0.5.11"
+async-graphql-axum = "4.0.4"
+
+# future-utils = "0.12.1"
+
+tokio = {version = "1.19.2", features = ["rt-multi-thread", "macros", "time", "signal"]}
+
+tracing-subscriber = {version = "0.3.14", features = ["env-filter"]}
+tower-http = {version = "*", features = ["trace"]}
+tracing = "0.1.35"
+anyhow = "1.0.58"
+
+serde = {version = "1.0.138", features = ["derive"]}
+serde_json = "1.0.82"

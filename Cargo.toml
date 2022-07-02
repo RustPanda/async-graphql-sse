@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "async-graphql-sse-server",
+    "request-sse"
+]
