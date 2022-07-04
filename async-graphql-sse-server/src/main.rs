@@ -4,7 +4,7 @@ mod schema;
 use anyhow::Error;
 use async_graphql::{
     async_stream::try_stream,
-    extensions::Tracing,
+    extensions::{ApolloTracing, Tracing},
     futures_util::{
         future::{AbortHandle, Abortable},
         StreamExt,
@@ -73,7 +73,10 @@ async fn graphql_playground() -> impl IntoResponse {
 async fn main() -> Result<(), Error> {
     tracing_init()?;
 
-    let schema = schema::build().extension(Tracing).finish();
+    let schema = schema::build()
+        .extension(Tracing)
+        // .extension(ApolloTracing)
+        .finish();
 
     // schema.execute_stream(request)
 

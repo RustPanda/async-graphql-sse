@@ -12,7 +12,7 @@
     <ol id="list">
     </ol>
     <script>
-        const evtSource = new EventSource("http://localhost:8080/?subscription={interval}");
+        const evtSource = new EventSource("http://localhost:8080/?subscription={interval(n:2)}");
 
         evtSource.onmessage = function (event) {
             const newElement = document.createElement("li");
@@ -21,6 +21,9 @@
             newElement.textContent = event.data;
             eventList.appendChild(newElement);
         }
+        evtSource.onerror = function (err) {
+            console.log(err);
+        };
 
     </script>
 </body>
